@@ -24,6 +24,12 @@ function init() {
       onStartParams: [projectClass],
     }
   );
+
+  const tlOut = gsap.timeline();
+  tlOut.to(element, { duration: 0.7, x: 250, autoAlpha: 0 });
+
+  const tlTransition = gsap.timeline();
+  tlTransition.add(tlIn).add(tlOut);
 }
 
 window.addEventListener("load", function () {
