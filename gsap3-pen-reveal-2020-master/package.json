@@ -1,0 +1,14 @@
+{
+  "name": "gsap3-pen-reveal-2020-master",
+  "version": "1.0.0",
+  "description": "[ScrollTrigger - Pen Reveal](https://ihatetomatoes.net/store/)",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gsap": "^3.6.0"
+  }
+}
