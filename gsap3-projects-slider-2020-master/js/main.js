@@ -3,61 +3,95 @@ function init() {
   gsap.set(".project", { x: "-100%" });
 
   const totalSlides = document.querySelectorAll(".project").length;
+  const wrapper = gsap.utils.wrap(0, totalSlides);
 
   const updateClass = (projectClass) => {
     document.querySelector("body").className = projectClass;
   };
 
-  const createTimelineIn = (index) => {
+  const createTimelineIn = (direction, index) => {
+    const goPrev = direction === "prev";
+
     const element = document.querySelector(".project.project0" + index);
     const projectClasses = element.className.split(" ");
     const projectClass = projectClasses[1];
-    const tlIn = gsap.timeline();
-    tlIn.fromTo(
-      element,
-      {
-        autoAlpha: 0,
-        x: "-100%",
+    const title = element.querySelector(".project-title");
+    const subtitle = element.querySelector(".project-subtitle");
+    const button = element.querySelector(".button-container");
+
+    const tlIn = gsap.timeline({
+      defaults: {
+        modifiers: {
+          x: gsap.utils.unitize((x) => {
+            return goPrev ? Math.abs(x) : x;
+          }),
+        },
       },
-      {
-        duration: 0.7,
-        x: 0,
-        autoAlpha: 1,
-        onStart: updateClass,
-        onStartParams: [projectClass],
-      }
-    );
+    });
+    tlIn
+      .fromTo(
+        element,
+        {
+          autoAlpha: 0,
+          x: "-100%",
+        },
+        {
+          duration: 0.3,
+          ease: Power4.out,
+          x: 0,
+          autoAlpha: 1,
+          onStart: updateClass,
+          onStartParams: [projectClass],
+        }
+      )
+      .from([title, subtitle, button], {
+        duration: 0.2,
+        x: -20,
+        autoAlpha: 0,
+        stagger: 0.1,
+      });
 
     return tlIn;
   };
 
-  const createTimelineOut = (index) => {
+  const createTimelineOut = (direction, index) => {
+    const goPrev = direction === "prev";
+
     const element = document.querySelector(".project.project0" + index);
     const tlOut = gsap.timeline();
-    tlOut.to(element, { duration: 0.7, x: 250, autoAlpha: 0 });
+    tlOut.to(element, {
+      duration: 0.3,
+      x: 250,
+      autoAlpha: 0,
+      modifiers: {
+        x: gsap.utils.unitize((x) => {
+          return goPrev ? -x : x;
+        }),
+      },
+      ease: "back.in(2)",
+    });
     return tlOut;
   };
 
-  const getIndex = (direction, index) => {
-    let goToIndex = index;
-    if (direction === "next") {
-      goToIndex = index < totalSlides ? index + 1 : 1;
-    } else if (direction === "prev") {
-      goToIndex = index > 1 ? index - 1 : totalSlides;
-    }
+  const updateCurrentStep = (goToIndex) => {
+    currentStep = goToIndex;
 
-    return goToIndex;
+    document.querySelectorAll(".dot").forEach((element, index) => {
+      element.setAttribute("class", "dot");
+      if (index === currentStep) {
+        element.classList.add("active");
+      }
+    });
+    positionDot();
   };
 
-  const createTimelineTransition = (direction, index) => {
-    const goToIndex = getIndex(direction, index);
-
-    const tlOut = createTimelineOut(index);
-    const tlIn = createTimelineIn(goToIndex);
+  const createTimelineTransition = (direction, toIndex) => {
+    const tlOut = createTimelineOut(direction, currentStep);
+    const tlIn = createTimelineIn(direction, toIndex);
 
     const tlTransition = gsap.timeline({
       onStart: () => {
-        currentStep = goToIndex;
+        updateCurrentStep(toIndex);
       },
     });
     tlTransition.add(tlOut).add(tlIn);
@@ -65,20 +99,78 @@ function init() {
     return tlTransition;
   };
 
-  let currentStep = 1;
+  const isTweening = () => {
+    return gsap.isTweening(".project");
+  };
 
-  createTimelineIn(currentStep);
+  let currentStep = 0;
+
+  createTimelineIn("next", currentStep);
 
   document.querySelector("button.next").addEventListener("click", (event) => {
     event.preventDefault();
+    const nextStep = wrapper(currentStep + 1);
 
-    createTimelineTransition("next", currentStep);
+    !isTweening() && createTimelineTransition("next", nextStep);
   });
 
   document.querySelector("button.prev").addEventListener("click", (event) => {
     event.preventDefault();
-    createTimelineTransition("prev", currentStep);
+
+    // const isFirst = currentStep === 0;
+    // const prevStep = isFirst ? totalSlides : currentStep - 1;
+    const prevStep = wrapper(currentStep - 1);
+    !isTweening() && createTimelineTransition("prev", prevStep);
   });
+
+  const createNavigation = () => {
+    const newDiv = document.createElement("div");
+    newDiv.setAttribute("class", "dots");
+
+    const spot = document.createElement("div");
+    spot.setAttribute("class", "spot");
+
+    for (let index = 0; index < totalSlides; index++) {
+      const element = document.createElement("button");
+      const text = document.createTextNode(index);
+      element.appendChild(text);
+      element.setAttribute("class", "dot");
+      if (currentStep === index) {
+        element.classList.add("active");
+      }
+
+      element.addEventListener("click", () => {
+        if (!isTweening() && currentStep !== index) {
+          const direction = index > currentStep ? "next" : "prev";
+          createTimelineTransition(direction, index);
+        }
+      });
+      newDiv.appendChild(element);
+    }
+
+    newDiv.appendChild(spot);
+    document.querySelector(".projects").append(newDiv);
+    positionDot();
+  };
+
+  const positionDot = () => {
+    const activeDotX = document.querySelector(".dot.active").offsetLeft;
+    const spot = document.querySelector(".spot");
+    const spotX = spot.offsetLeft;
+    const destinationX = Math.round(activeDotX - spotX + 5);
+
+    const dotTl = gsap.timeline();
+    dotTl
+      .to(spot, {
+        duration: 0.4,
+        x: destinationX,
+        scale: 2.5,
+        ease: "powe1.Out",
+      })
+      .to(spot, { duratiom: 0.2, scale: 1, ease: "power1.in" });
+  };
+
+  createNavigation();
 }
 
 window.addEventListener("load", function () {
