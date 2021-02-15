@@ -38,15 +38,26 @@ function init() {
     return tlOut;
   };
 
-  const createTimelineTransition = (index) => {
-    const goToIndex = index < totalSlides ? index + 1 : 1;
+  const getIndex = (direction, index) => {
+    let goToIndex = index;
+    if (direction === "next") {
+      goToIndex = index < totalSlides ? index + 1 : 1;
+    } else if (direction === "prev") {
+      goToIndex = index > 1 ? index - 1 : totalSlides;
+    }
+
+    return goToIndex;
+  };
+
+  const createTimelineTransition = (direction, index) => {
+    const goToIndex = getIndex(direction, index);
 
     const tlOut = createTimelineOut(index);
     const tlIn = createTimelineIn(goToIndex);
 
     const tlTransition = gsap.timeline({
       onStart: () => {
-        currentStep < totalSlides ? currentStep++ : (currentStep = 1);
+        currentStep = goToIndex;
       },
     });
     tlTransition.add(tlOut).add(tlIn);
@@ -61,7 +72,12 @@ function init() {
   document.querySelector("button.next").addEventListener("click", (event) => {
     event.preventDefault();
 
-    createTimelineTransition(currentStep);
+    createTimelineTransition("next", currentStep);
+  });
+
+  document.querySelector("button.prev").addEventListener("click", (event) => {
+    event.preventDefault();
+    createTimelineTransition("prev", currentStep);
   });
 }
 
