@@ -19,6 +19,7 @@ h1 {
     margin-top: 0;
     font-weight: 300;
 }
+
 #intro {
     font-size: 14px;
     line-height: 1.4;
@@ -31,6 +32,7 @@ h1 {
     max-width: 80%;
     margin: 0 auto;
 }
+
 #intro img {
     max-width: 70%;
 }
@@ -40,10 +42,12 @@ h1 {
     padding: 40px 0;
     background-color: #fff;
 }
+
 .bcg-blue {
     background-color: #E8F4FF;
     overflow: hidden;
 }
+
 .copy {
     max-width: 600px;
     text-align: center;
@@ -55,17 +59,20 @@ h1 {
     margin: 100px 0 0 0;
     padding: 0;
 }
+
 .part {
     padding-bottom: 60px;
     overflow: hidden;
     display: flex;
 }
+
 .part .image {
     width: 90px;
     margin: 0 30px;
     background: url('../img/img_pen.png') no-repeat 50% 0;
     background-size: 90px auto;
 }
+
 .parts h3 {
     font-size: 13px;
     width: calc(50% - 90px);
@@ -73,6 +80,7 @@ h1 {
     text-align: right;
     /* background-color: pink; */
 }
+
 .parts p {
     font-size: 13px;
     width: calc(50% - 90px);
@@ -80,30 +88,45 @@ h1 {
     text-align: left;
     /* background-color: yellow; */
 }
+
 .part1 .image {
     background-position: 50% 0;
     min-height: 110px;
 }
+
 .part2 .image {
     background-position: 50% -232px;
     min-height: 370px;
 }
 
 /* this is the pen body */
+.part3 {
+    z-index: 2;
+    position: relative;
+}
+
 .part3 .image {
     background: url('../img/img_pen-body.png') no-repeat 50% 0;
     background-size: 90px auto;
     min-height: 580px;
 }
+
 .part4 .image {
     background-position: 50% -626px;
     min-height: 430px;
 
 }
+
+.part5 {
+    z-index: 1;
+    position: relative;
+}
+
 .part5 .image {
     background-position: 50% -1156px;
     min-height: 150px;
 }
+
 .part6 .image {
     background-position: 50% -1439px;
     min-height: 150px;
@@ -135,44 +158,47 @@ h1 {
     text-align: center;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.5);
-    background-color: #06060d; 
+    background-color: #06060d;
 }
+
 .footer-container .wrapper {
     width: 80%;
     max-width: none;
-    margin: 0 10%; 
+    margin: 0 10%;
 }
+
 .footer-container h3 {
     margin: 0;
     padding: 20px 0;
-    font-weight: normal; 
+    font-weight: normal;
 }
+
 .footer-container a {
-    color: rgba(255, 255, 255, 0.5); 
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* ==========================================================================
     Media Queries
    ========================================================================== */
 
-@media only screen and (min-width: 480px) {
-
-}
+@media only screen and (min-width: 480px) {}
 
 @media only screen and (min-width: 768px) {
-    .parts p, .parts h3 {
+
+    .parts p,
+    .parts h3 {
         font-size: 18px;
     }
+
     h1 {
         font-size: 65px;
         line-height: 1.2;
     }
+
     #intro {
         font-size: 24px;
         line-height: 1.4;
     }
 }
 
-@media only screen and (min-width: 1140px) {
-
-}
+@media only screen and (min-width: 1140px) {}
