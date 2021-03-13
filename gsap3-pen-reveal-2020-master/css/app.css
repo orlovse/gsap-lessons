@@ -133,24 +133,27 @@ h1 {
 }
 
 /* =Fade In Text */
-/* .part h3,
+.part h3,
 .part p {
     transition: all 0.3s ease-in;
     opacity: 0;
     visibility: hidden;
 }
+
 .part.fade-in h3,
 .part.fade-in p {
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
 }
+
 .part h3 {
     transform: translateX(-20px);
 }
+
 .part p {
     transform: translateX(20px);
-} */
+}
 
 
 /* =Footer */

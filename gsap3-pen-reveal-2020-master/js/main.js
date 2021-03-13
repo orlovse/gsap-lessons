@@ -14,6 +14,22 @@ function init() {
     },
   });
 
+  const allParts = gsap.utils.toArray(".part");
+  allParts.forEach((part, index) => {
+    let startPosition = "top center";
+    if (index === 2) {
+      startPosition = `top+=${height} center`;
+    }
+    gsap.set(part, {
+      scrollTrigger: {
+        id: `${part.getAttribute("class")}`,
+        trigger: part,
+        start: startPosition,
+        toggleClass: "fade-in",
+      },
+    });
+  });
+
   const partTopOffsets = [547, 722, 842];
 
   gsap.utils.toArray([".part4", ".part5", ".part6"]).forEach((part, index) => {
